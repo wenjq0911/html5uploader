@@ -12,7 +12,7 @@
 * 调用
 
 ```javascript
-$('#upload').html5uploader({
+$('#uploader').html5uploader({
 	auto:true,
 	multi:false,
 	url:'upload_url'
