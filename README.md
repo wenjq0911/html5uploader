@@ -1,6 +1,6 @@
 # html5uploader
 简单基于h5的上传文件上传插件（根据网上资源修改）
-##使用方法
+## 使用方法
 
 * 页面引用css与js
 * 定义一个div  
@@ -12,14 +12,14 @@
 * 调用
 
 ```javascript
-$('#upload').html5uploader({
+$('#uploader').html5uploader({
 	auto:true,
 	multi:false,
 	url:'upload_url'
 });
 ```
 
-##参数说明
+## 参数说明
 
 字段|类型|默认值|说明
 ----|----|----|----
@@ -39,7 +39,7 @@ savePath|字符|空|文件保存的相对路径(即服务器路径) 必选
 saveFileNameTemplate|字符|'${prefix}_${fileName}'|保存的文件名模版，可用参数 <br/>${prefix}:前缀，格式为yyyyMMddHHmmssfff的时间戳<br/>${fileName}:原始文件名
 basePath|字符|空|插件的基础路径，即h5uploader的文件夹路径，如：/Scripts/h5uploader/ 必选
 
-##事件
+## 事件
 
 事件|参数|说明
 ----|--|----
