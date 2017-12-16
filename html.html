@@ -13,7 +13,9 @@ $(function(){
     $('#upload').html5uploader({
         auto:true,
         multi:false,
-        url:'upload.php',
+		basePath:'/Scripts/h5uploader/',
+		savePath:'/Upload/Files/'
+        url:'Upload.ashx',
         onUploadStart:function(){
             console.log('开始上传');
 		},

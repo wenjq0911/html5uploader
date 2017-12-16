@@ -12,7 +12,7 @@ date:2017.12.14
         
         var defaults = {
             fileTypeExts: '', //允许上传的文件类型，填写mime类型
-            url: '', //文件提交的地址
+            //url: '', //文件提交的地址
             auto: false, //自动上传
             multi: true, //默认允许选择多个文件
             buttonText: '选择文件', //上传按钮上的文字
@@ -27,7 +27,10 @@ date:2017.12.14
             method: 'post',//访问当时的请求方式，默认post
             initQueue: [],//初始化显示的队列，编辑时传入已保存文件的路径列表
             maxQueue: 999,//允许上传的最大数，默认999
-            fileSizeLimit:0//文件大小限制（单位KB）
+            fileSizeLimit: 0,//文件大小限制（单位KB）
+            savePath: '',//文件保存的相对路径
+            saveFileNameTemplate: '${prefix}_${fileName}',//文件命名模板
+            basePath:''//插件基础路径
         }
  
         var option = $.extend(defaults, opts);
@@ -78,7 +81,7 @@ date:2017.12.14
             var ZXXFILE = {
                 fileInput: fileInputButton.get(0), //html file控件
                 upButton: null, //提交按钮
-                url: option.url, //ajax地址
+                //url: option.url, //ajax地址
                 fileFilter: [], //过滤后的文件数组
                 filter: function (files) { //选择文件组的过滤方法
                     var arr = [];
@@ -115,8 +118,8 @@ date:2017.12.14
                 },
                 //文件选择后
                 onSelect: option.onSelect || function (files) {
-					var  itemTemplate = '<li id="${fileID}file"><div class="progress"><div class="progressbar"></div></div><span class="filename"><a href="" target="_blank">${fileName}</a></span><span class="progressnum">0/${fileSize}</span><a class="uploadbtn icon iconfont icon-upload"></a><a class="delfilebtn icon iconfont icon-delete"></a></li>'; //上传队列显示的模板,最外层标签使用<li>
-					var itemTemplate_auto = '<li id="${fileID}file"><div class="progress"><div class="progressbar"></div></div><span class="filename"><a href="" target="_blank">${fileName}</a></span><span class="progressnum">0/${fileSize}</span><a class="delfilebtn icon iconfont icon-delete"></a></li>'; //上传队列显示的模板,最外层标签使用<li>
+                    var itemTemplate = '<li id="${fileID}file"><span class="filename"><a href="" target="_blank">${fileName}</a></span><span class="progressnum">0/${fileSize}</span><a class="uploadbtn icon iconfont icon-upload"></a><a class="delfilebtn icon iconfont icon-delete"></a><div class="progress"><div class="progressbar"></div></div></li>'; //上传队列显示的模板,最外层标签使用<li>
+                    var itemTemplate_auto = '<li id="${fileID}file"><span class="filename"><a href="" target="_blank">${fileName}</a></span><span class="progressnum">0/${fileSize}</span><a class="delfilebtn icon iconfont icon-delete"></a><div class="progress"><div class="progressbar"></div></div></li>'; //上传队列显示的模板,最外层标签使用<li>
 					
                     for (var i = 0; i < files.length; i++) {
  
@@ -247,13 +250,16 @@ date:2017.12.14
  
                             option.onUploadStart(file);
                             // 开始上传
-                            xhr.open("POST", self.url, true);
+                            //xhr.open("POST", self.url, true);
+                            xhr.open("POST", option.basePath + "/upload.ashx", true);
                             //xhr.setRequestHeader("X_FILENAME", file.name);
                             var formData = new FormData();
                             formData.append('fileData', file);
                             for (var item in option.formData) {
                                 formData.append(item, option.formData[item]);
                             }
+                            formData.append('savePath', option.savePath);
+                            formData.append('saveFileNameTemplate', option.saveFileNameTemplate);
                             xhr.send(formData);
                         }
                     })(file);
