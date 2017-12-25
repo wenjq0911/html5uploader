@@ -15,7 +15,8 @@
 $('#uploader').html5uploader({
 	auto:true,
 	multi:false,
-	url:'upload_url'
+	basePath:'/Scripts/h5uploader/',
+	savePath:'/Upload/Files/'
 });
 ```
 
