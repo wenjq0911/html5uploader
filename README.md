@@ -49,3 +49,4 @@ onUploadStart|file：文件对象|上传开始时的动作
 onUploadSuccess|file:文件对象 <br/> res:服务器响应信息|上传成功的动作
 onUploadComplete|file:文件对象 <br/> res:服务器响应信息|上传完成的动作
 onUploadError|file:文件对象 <br/> res:服务器响应信息|上传失败的动作
+onSelectedFiles|files:选择的文件数组|选择文件后的事件，接收一个布尔的返回值，false时取消上传
