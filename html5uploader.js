@@ -22,7 +22,8 @@ date:2017.12.14
             onUploadComplete: function (file,res) {}, //上传完成的动作
             onUploadError: function (file,res) {}, //上传失败的动作
             onInit: function () { }, //初始化时的动作
-            onSelectedFiles: function (files) { return true;},//文件上传前的动作，需要返回一个布尔值，false取消将文件加入队列
+            onSelectedFiles: function (files) { return true; },//文件上传前的动作，需要返回一个布尔值，false取消将文件加入队列
+            onDeletedFile:function(path){},//文件删除后的事件
             formData: {},//附加的参数
             fileDataName: 'filedata',//上传时的文件参数名称，默认fileData
             method: 'post',//访问当时的请求方式，默认post
@@ -137,6 +138,8 @@ date:2017.12.14
                         }
 						//为删除文件按钮绑定删除文件事件
                         $('#' + file.index + 'file').children('.delfilebtn').bind('click', function () {
+                            var str_href = $($($(this).siblings('.filename:first')).children()[0]).attr('href');
+                            option.onDeletedFile(str_href);
 							var index = parseInt($(this).parents('li').attr('id'));
 							ZXXFILE.funDeleteFile(index);
 						});
