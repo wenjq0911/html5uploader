@@ -11,7 +11,7 @@ date:2017.12.14
     $.fn.html5uploader = function (opts) {
         
         var defaults = {
-            fileTypeExts: '', //允许上传的文件类型，填写mime类型
+            fileTypeExts: [], //允许上传的文件类型，后缀
             //url: '', //文件提交的地址
             auto: false, //自动上传
             multi: true, //默认允许选择多个文件
@@ -57,11 +57,14 @@ date:2017.12.14
             return false;
         }
         //将文件类型格式化为数组
-        var formatFileType = function (str) {
-            if (str) {
-                return str.split(",");
+        var formatFileType = function (old_arr) {
+            if (old_arr == null || old_arr == undefined || old_arr.length == 0)
+                return false;
+            var new_arr = new Array();
+            for (var i = 0; i < old_arr.length;i++){
+                new_arr.push(old_arr[i].toLowerCase());
             }
-            return false;
+            return new_arr;
         }
  
         this.each(function () {
@@ -102,7 +105,8 @@ date:2017.12.14
                     } else {
                         for (var i in files) {
                             if (files[i].constructor == File) {
-                                if ($.inArray(files[i].type, typeArray) >= 0) {
+                                var fileend = files[i].name.substring(files[i].name.indexOf(".")).toLowerCase();
+                                if ($.inArray(fileend, typeArray) >= 0) {
                                     if ((Math.round(files[i].size * 100 / 1024) / 100) > option.fileSizeLimit && option.fileSizeLimit > 0) {
                                         alert('文件大小超出限制！');
                                         fileInputButton.val('');
@@ -185,7 +189,7 @@ date:2017.12.14
                         alert('超过允许的最大上传数');
                         return;
                     }
-                    if (!ZXXFILE.onSelectedFiles(files))
+                    if (ZXXFILE.onSelectedFiles(files)==false)
                         return;
                     //继续添加文件
                     files = this.filter(files)
@@ -294,6 +298,8 @@ date:2017.12.14
                     });
                     _this.children('ul').append(_str);
                     _this.find('.delfilebtnInit').bind('click', function () {
+                        var str_href = $($($(this).siblings('.filename:first')).children()[0]).attr('href');
+                        option.onDeletedFile(str_href);
                         var li = $(this).parents('li');
                         li.fadeOut(function () {
                             li.remove();

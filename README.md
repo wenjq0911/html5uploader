@@ -24,7 +24,7 @@ $('#uploader').html5uploader({
 
 字段|类型|默认值|说明
 ----|----|----|----
-fileTypeExts|字符|-|允许上传的文件类型，填写mime类型
+fileTypeExts|数组|[]|允许上传的文件类型，文件后缀字符集合 ['.docx','.xls']
 auto|布尔|false|自动上传
 multi|布尔|true|多文件
 buttonText|字符|选择文件|上传按钮上的文字
