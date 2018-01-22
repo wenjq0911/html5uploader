@@ -32,7 +32,10 @@ date:2017.12.14
             fileSizeLimit: 0,//文件大小限制（单位KB）
             savePath: '',//文件保存的相对路径
             saveFileNameTemplate: '${prefix}_${fileName}',//文件命名模板
-            basePath:''//插件基础路径
+            basePath: '',//插件基础路径
+            onFileTypeError: function () { alert('文件类型不允许!'); },
+            onFileSizeError: function () { alert('文件大小超出限制!'); },
+            onQueueFull: function () { alert('文件个数超出限制!'); },
         }
  
         var option = $.extend(defaults, opts);
@@ -95,7 +98,8 @@ date:2017.12.14
                         for (var i in files) {
                             if (files[i].constructor == File) {
                                 if ((Math.round(files[i].size * 100 / 1024) / 100) > option.fileSizeLimit&&option.fileSizeLimit>0) {
-                                    alert('文件大小超出限制！');
+                                    //alert('文件大小超出限制！');
+                                    option.onFileSizeError();
                                     fileInputButton.val('');
                                 } else {
                                     arr.push(files[i]);
@@ -108,13 +112,15 @@ date:2017.12.14
                                 var fileend = files[i].name.substring(files[i].name.indexOf(".")).toLowerCase();
                                 if ($.inArray(fileend, typeArray) >= 0) {
                                     if ((Math.round(files[i].size * 100 / 1024) / 100) > option.fileSizeLimit && option.fileSizeLimit > 0) {
-                                        alert('文件大小超出限制！');
+                                        //alert('文件大小超出限制！');
+                                        option.onFileSizeError();
                                         fileInputButton.val('');
                                     } else {
                                         arr.push(files[i]);
                                     }
                                 } else {
-                                    alert('文件类型不允许！');
+                                    //alert('文件类型不允许！');
+                                    option.onFileTypeError();
                                     fileInputButton.val('');
                                 }
                             }
@@ -178,7 +184,8 @@ date:2017.12.14
                 onUploadSuccess: option.onUploadSuccess, //文件上传成功时
                 onUploadError: option.onUploadError, //文件上传失败时,
                 onUploadComplete: option.onUploadComplete, //文件全部上传完毕时
-                onSelectedFiles:option.onSelectedFiles,
+                onSelectedFiles: option.onSelectedFiles,
+                onQueueFull:option.onQueueFull,
                 /* 开发参数和内置方法分界线 */
  
                 //获取选择文件，file控件或拖放
@@ -186,7 +193,8 @@ date:2017.12.14
                     // 获取文件列表对象
                     var files = e.target.files || e.dataTransfer.files;
                     if (files.length + _this.find('.filelist li').length > option.maxQueue) {
-                        alert('超过允许的最大上传数');
+                        //alert('超过允许的最大上传数');
+                        ZXXFILE.onQueueFull();
                         return;
                     }
                     if (ZXXFILE.onSelectedFiles(files)==false)
