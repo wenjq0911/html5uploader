@@ -37,7 +37,6 @@ fileSizeLimit|数字|0|文件大小限制（单位KB），0时表示不限制
 savePath|字符|空|文件保存的相对路径(即服务器路径) 必选
 saveFileNameTemplate|字符|'${prefix}_${fileName}'|保存的文件名模版，可用参数 <br/>${prefix}:前缀，格式为yyyyMMddHHmmssfff的时间戳<br/>${fileName}:原始文件名
 basePath|字符|空|插件的基础路径，即h5uploader的文件夹路径，如：/Scripts/h5uploader/ 必选
-
 ## 事件
 
 事件|参数|说明
@@ -49,3 +48,6 @@ onUploadComplete|file:文件对象 <br/> res:服务器响应信息|上传完成�
 onUploadError|file:文件对象 <br/> res:服务器响应信息|上传失败的动作
 onSelectedFiles|files:选择的文件数组|选择文件后的事件，接收一个布尔的返回值，false时取消上传
 onDeletedFile|filepath:包含文件名的文件完整相对路径|删除队列中的文件时触发
+onFileTypeError|无|文件类型不允许时的回调
+onFileSizeError|无|文件大小超出限制时的回调
+onQueueFull|无|文件个数超出限制的回调
