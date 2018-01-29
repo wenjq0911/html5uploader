@@ -87,6 +87,7 @@ date:2017.12.14
             var itemTemplate_init = '<li><span class="filename"><a target="_blank" href="${filePath}">${fileName}</a></span><a class="delfilebtnInit icon iconfont icon-delete"></a></li>';
             //创建文件对象
             var ZXXFILE = {
+                isSuccessAll:[],
                 fileInput: fileInputButton.get(0), //html file控件
                 upButton: null, //提交按钮
                 //url: option.url, //ajax地址
@@ -160,10 +161,17 @@ date:2017.12.14
                         _this.find('.uploadbtn').bind('click', function () {
                             var index = parseInt($(this).parents('li').attr('id'));
                             ZXXFILE.funUploadFile(getFile(index, files));
+                            $(this).hide();
                         });
                     }
-                    
- 
+                    if (option.auto) {
+                        window.ZXXFILE_Interval=setInterval(function () {
+                            if (files.length == ZXXFILE.isSuccessAll.length) {
+                                option.onUploadComplete(files, "success");
+                                clearInterval(window.ZXXFILE_Interval);
+                            }
+                        }, 200);
+                    }
                 },
                 //文件删除后
                 onDelete: function (index) {
@@ -240,7 +248,7 @@ date:2017.12.14
                 //文件上传
                 funUploadFile: function (file) {
                     var self = this;
-                    (function (file) {                      
+                    var res = (function (file) {
                         var xhr = new XMLHttpRequest();
                         if (xhr.upload) {
                             // 上传中
@@ -257,12 +265,15 @@ date:2017.12.14
                                             $('#' + file.index + 'file').children('.progress,.progressnum').remove();
                                         }, option.removeTimeout);
                                         $('#' + file.index + 'file').children('.filename').children('a').attr('href', xhr.responseText);
-                                        self.onUploadComplete(file, xhr.responseText);
- 
+                                        if (!option.auto) {
+                                            self.onUploadComplete(file, xhr.responseText);
+                                        }
                                     } else {
                                         self.onUploadError(file, xhr.responseText);
                                     }
+                                    ZXXFILE.isSuccessAll.push(xhr);
                                     fileInputButton.val('');
+
                                 }
                             };
  
